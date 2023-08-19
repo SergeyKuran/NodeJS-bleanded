@@ -7,17 +7,55 @@ const {
 } = require("../services/taskServices");
 
 const getAllTasks = async (req, res, next) => {
-  const tasks = await getAllTasksService();
-  res.json(tasks);
+  try {
+    const tasks = await getAllTasksService();
+    res.json(tasks);
+  } catch (error) {
+    next(error);
+  }
 };
 
-const getOneTask = (req, res, next) => {};
+const getOneTask = async (req, res, next) => {
+  try {
+    const { taskID } = req.params;
+    const task = await getOneTaskService(taskID);
 
-const createTask = (req, res, next) => {};
+    res.status(200).json(task);
+  } catch (error) {
+    next(error);
+  }
+};
 
-const updateTask = (req, res, next) => {};
+const createTask = async (req, res, next) => {
+  try {
+    const newTask = await createTaskService(req.body);
+    res.status(201).json(newTask);
+  } catch (error) {
+    next(error);
+  }
+};
 
-const deleteTask = (req, res, next) => {};
+const updateTask = async (req, res, next) => {
+  try {
+    const { taskID } = req.params;
+    const updatedTask = await updateTaskService(taskID, req.body);
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteTask = async (req, res, next) => {
+  try {
+    const { taskID } = req.params;
+    const deletedTaskId = await deleteTaskService(taskID);
+
+    res.status(200).json({ message: `Task ${deletedTaskId} has been deleted` });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAllTasks,

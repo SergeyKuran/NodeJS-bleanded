@@ -10,10 +10,7 @@ const {
 
 const router = Router();
 
-router.get("/", getAllTasks);
-router.get("/:taskID", getOneTask);
-router.post("/", createTask);
-router.patch("/:taskID", updateTask);
-router.delete("/:taskID", deleteTask);
+router.route("/").get(getAllTasks).post(createTask);
+router.route("/:taskID").get(getOneTask).patch(updateTask).delete(deleteTask);
 
 module.exports = { tasksRouter: router };
