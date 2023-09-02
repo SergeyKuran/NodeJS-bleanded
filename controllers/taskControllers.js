@@ -4,7 +4,7 @@ const {
   createTaskService,
   updateTaskService,
   deleteTaskService,
-} = require("../services/taskServices");
+} = require('../services/taskServices');
 
 const getAllTasks = async (req, res, next) => {
   try {
@@ -49,9 +49,9 @@ const updateTask = async (req, res, next) => {
 const deleteTask = async (req, res, next) => {
   try {
     const { taskID } = req.params;
-    const deletedTaskId = await deleteTaskService(taskID);
+    const deletedTask = await deleteTaskService(taskID);
 
-    res.status(200).json({ message: `Task ${deletedTaskId} has been deleted` });
+    res.status(200).json(deletedTask);
   } catch (error) {
     next(error);
   }
