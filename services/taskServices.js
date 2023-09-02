@@ -1,59 +1,37 @@
-const fs = require("fs/promises");
-const path = require("path");
-const {randomUUID} = require('node:crypto')
-
-const taskPath = path.join(__dirname, "..", "db", "tasks.json");
+const Task = require('../models/task');
+const HttpError = require('../utils/HttpError');
 
 const getAllTasksService = async () => {
-  const jsonData = await fs.readFile(taskPath, "utf-8");
-
-  return JSON.parse(jsonData);
+  return await Task.find();
 };
 
 const getOneTaskService = async (taskId) => {
-  const tasks = await getAllTasksService()
-  const task = tasks.find(({ id }) => taskId === id);
+  const task = await Task.findById(taskId);
   if (!task) {
-    throw new Error("This task does not exist")
+    throw new HttpError(404);
   }
 
   return task;
 };
 
 const createTaskService = async (body) => {
-  const tasks = await getAllTasksService();
-  const newTask = { ...body, id: randomUUID() };
-  tasks.push(newTask);
-
-  await fs.writeFile(taskPath, JSON.stringify(tasks, null, 2));
-
-  return newTask;
+  return await Task.create(body);
 };
 
 const updateTaskService = async (taskId, body) => {
-  const tasks = await getAllTasksService();
-  const taskIndex = tasks.findIndex(({ id }) => taskId === id);
-  if (taskIndex === -1) {
-     throw new Error("This task does not exist");
+  const updetedTask = await Task.findByIdAndUpdate(taskId, body, { new: true });
+  if (!updetedTask) {
+    throw new Error('This task does not exist');
   }
-
-  tasks[taskIndex] = { ...tasks[taskIndex], ...body };
-  await fs.writeFile(taskPath, JSON.stringify(tasks, null, 2));
-
-  return tasks[taskIndex];
+  return updetedTask;
 };
 
 const deleteTaskService = async (taskId) => {
-  const tasks = await getAllTasksService();
-  const taskIndex = tasks.findIndex(({ id }) => taskId === id);
-  if (taskIndex === -1) {
-    throw new Error("This task does not exist");
+  const deletedTask = await Task.findByIdAndRemove(taskId);
+  if (!deletedTask) {
+    throw new Error('This task does not exist');
   }
-
-  tasks.splice(taskIndex, 1);
-  await fs.writeFile(taskPath, JSON.stringify(tasks, null, 2));
-
-  return taskId;
+  return deletedTask;
 };
 
 module.exports = {
