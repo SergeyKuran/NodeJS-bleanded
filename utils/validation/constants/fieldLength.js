@@ -1,0 +1,5 @@
+const NAME_MIN_LENGTH = 2;
+const NAME_MAX_LENGTH = 15;
+const EMAIL_MAX_LENGTH = 30;
+
+module.exports = { NAME_MIN_LENGTH, NAME_MAX_LENGTH, EMAIL_MAX_LENGTH };

@@ -5,57 +5,41 @@ const {
   updateTaskService,
   deleteTaskService,
 } = require('../services/taskServices');
+const controllerWrapper = require('../utils/controllerWrapper');
 
-const getAllTasks = async (req, res, next) => {
-  try {
-    const tasks = await getAllTasksService();
-    res.json(tasks);
-  } catch (error) {
-    next(error);
-  }
-};
+const getAllTasks = controllerWrapper(async (req, res, next) => {
+  const tasks = await getAllTasksService();
+  res.json(tasks);
+});
 
-const getOneTask = async (req, res, next) => {
-  try {
-    const { taskID } = req.params;
-    const task = await getOneTaskService(taskID);
+const getOneTask = controllerWrapper(async (req, res, next) => {
+  const { taskID } = req.params;
+  const task = await getOneTaskService(taskID);
 
-    res.status(200).json(task);
-  } catch (error) {
-    next(error);
-  }
-};
+  res.status(200).json(task);
+});
 
-const createTask = async (req, res, next) => {
-  try {
-    const newTask = await createTaskService(req.body);
-    res.status(201).json(newTask);
-  } catch (error) {
-    next(error);
-  }
-};
+const createTask = controllerWrapper(async (req, res, next) => {
+  const newTask = await createTaskService(req.body);
+  res.status(201).json(newTask);
+});
 
-const updateTask = async (req, res, next) => {
-  try {
-    const { taskID } = req.params;
-    const updatedTask = await updateTaskService(taskID, req.body);
+const updateTask = controllerWrapper(async (req, res, next) => {
+  const { taskID } = req.params;
+  const updatedTask = await updateTaskService(taskID, req.body);
 
-    res.status(200).json(updatedTask);
-  } catch (error) {
-    next(error);
-  }
-};
+  res.status(200).json(updatedTask);
+});
 
-const deleteTask = async (req, res, next) => {
-  try {
-    const { taskID } = req.params;
-    const deletedTask = await deleteTaskService(taskID);
+const deleteTask = controllerWrapper(async (req, res, next) => {
+  const { taskID } = req.params;
+  const deletedTask = await deleteTaskService(taskID);
 
-    res.status(200).json(deletedTask);
-  } catch (error) {
-    next(error);
-  }
-};
+  res.status(200).json(deletedTask);
+});
+
+// let createTask = () => {};
+// createTask = controllerWrapper(createTask);
 
 module.exports = {
   getAllTasks,
