@@ -20,4 +20,10 @@ const registrationValidationSchema = Joi.object({
     .messages({ 'string.pattern.base': PASSWORD_VALIDATION_ERROR_MESSAGE }),
 });
 
-module.exports = { registrationValidationSchema };
+const loginValidationSchema = Joi.object().keys({
+  email: registrationValidationSchema.extract('email'),
+  password: registrationValidationSchema.extract('password'),
+});
+
+
+module.exports = { registrationValidationSchema, loginValidationSchema };

@@ -13,7 +13,8 @@ const userSchema = new Schema({
     required: true,
     type: String,
   },
-});
+  refreshToken: String,
+  });
 
 const User = model('user', userSchema);
 
