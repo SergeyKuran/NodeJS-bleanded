@@ -9,7 +9,7 @@ const registrationController = controllerWrapper(async (req, res) => {
 
 const loginController = controllerWrapper(async (req, res) => {
     const accessToken = await loginService(req.body);
-    res.json(accessToken);
+    res.json({accessToken});
 });
 
 const logoutController = controllerWrapper(async (req, res) => {
