@@ -5,15 +5,16 @@ const { assignToken } = require('../utils/assignTokens');
 
 const registationService = async (body) => {
   const user = await User.findOne({ email: body.email });
-  console.log(user);
+  
   if (user) {
     throw new HttpError(409, 'Email should be unique');
   }
-  const hashedPassword = await bcrypt.hash(body.password, 12);
-  const newUser = await User.create({ ...body, password: hashedPassword });
+  
+  const newUser = await User.create(body);
   return {
     name: newUser.name,
     email: newUser.email,
+    password: newUser.password
   };
 };
 
@@ -32,8 +33,8 @@ const loginService = async (body) => {
   return accessToken;
 };
 
-const logoutService = async () => {
-  return;
+const logoutService = async (id) => {
+  await User.findByIdAndUpdate(id, { refreshToken: null });
 };
 
 module.exports = {

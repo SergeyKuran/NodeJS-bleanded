@@ -13,7 +13,8 @@ const loginController = controllerWrapper(async (req, res) => {
 });
 
 const logoutController = controllerWrapper(async (req, res) => {
-  const result = await logoutService();
+  await logoutService(req.user._id);
+  res.json({message: 'Success of logout'})
 });
 
 module.exports = {
